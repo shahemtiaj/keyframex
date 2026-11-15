@@ -11,7 +11,7 @@ is on. The scripts copy the extension into your user's CEP folder and switch tha
 
 **macOS**
 ```bash
-cd "/path/to/New/KeyframeX/install"
+cd keyframex/KeyframeX/install    # inside your clone of this repository
 bash install-mac.sh            # copies to ~/Library/Application Support/Adobe/CEP/extensions/KeyframeX
 # bash install-mac.sh --link   # developers: symlink instead, so edits apply on panel reload
 ```
@@ -31,7 +31,7 @@ instead of this one, with a different panel and different errors.
 bash install/package-zxp.sh /path/to/ZXPSignCmd            # self-signed
 bash install/package-zxp.sh /path/to/ZXPSignCmd cert.p12 pw # your certificate
 ```
-Install `dist/KeyframeX-1.1.0.zxp` with a ZXP installer (aescripts ZXP Installer,
+Install `dist/KeyframeX-<version>.zxp` with a ZXP installer (aescripts ZXP Installer,
 Anastasiy's Extension Manager). Signed installs don't need debug mode.
 
 ## First run

@@ -31,7 +31,8 @@ KeyframeX/
 │   ├── pipeline.js          serialized host calls, buildInAE()
 │   └── authoring-guide.md   rules for HTML that converts well (also used by the skills)
 ├── cli/keyframex.js         command line
-├── tools/                   compare.js (visual check vs. the page) + preview.js (After Effects-style renderer)
+├── tools/                   compare.js (visual check vs. the page), preview.js (After Effects-style
+│                            renderer), diag-text.jsx (reports text layers inside After Effects)
 ├── install/                 install / uninstall / package scripts
 ├── examples/                hand-written scene
 └── tests/                   test runner, strict AE mock, fixtures

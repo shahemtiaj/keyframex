@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Pictures</title>
+<style>
+  body{margin:0;background:#000}
+  #stage{position:relative;width:960px;height:540px;background:#14182b;overflow:hidden;font-family:sans-serif}
+  .card{position:absolute;left:60px;top:60px;width:260px;height:120px;background:#2b3a67;border-radius:16px;color:#fff;font-size:32px;padding:20px;box-sizing:border-box}
+  .card::before{content:'';position:absolute;right:-14px;top:-14px;width:40px;height:40px;border-radius:50%;background:#ffb703}
+  #rainbow{position:absolute;left:380px;top:60px;width:240px;height:120px;border-radius:20px;background:linear-gradient(90deg,#ff006e,#ffbe0b,#3a86ff)}
+  #masked{position:absolute;left:660px;top:60px;width:240px;height:160px;background:#06d6a0;-webkit-mask-image:radial-gradient(circle,#000 55%,transparent 56%);mask-image:radial-gradient(circle,#000 55%,transparent 56%)}
+  #masked span{position:absolute;left:70px;top:60px;font-size:28px;color:#000}
+  #inset{position:absolute;left:60px;top:260px;width:200px;height:120px;background:#eee;box-shadow:inset 0 0 20px #e63946}
+  #dashed{position:absolute;left:300px;top:260px;width:200px;height:120px;border:4px dashed #8ecae6;border-radius:12px}
+  #shift{position:absolute;left:560px;top:280px;width:300px;height:100px;border-radius:12px}
+</style></head>
+<body><div id="stage">
+  <div class="card" id="card">Hello</div>
+  <div id="rainbow"></div>
+  <div id="masked"><span>inside</span></div>
+  <div id="inset"></div>
+  <div id="dashed"></div>
+  <div id="shift"></div>
+  <svg width="960" height="540" style="position:absolute;left:0;top:0">
+    <defs><symbol id="star" viewBox="0 0 10 10"><polygon points="5,0 6.5,3.5 10,3.8 7.3,6.2 8.1,10 5,8 1.9,10 2.7,6.2 0,3.8 3.5,3.5" fill="#ffd166"/></symbol></defs>
+    <use id="useStar" href="#star" x="80" y="420" width="80" height="80"/>
+  </svg>
+</div>
+<script>
+  const DURATION = 2;
+  document.getElementById('rainbow').animate([{transform:'translateX(0) rotate(0deg)'},{transform:'translateX(-40px) rotate(-8deg)'}],{duration:2000,fill:'both',easing:'ease-in-out'});
+  document.getElementById('card').animate([{transform:'translateY(0)'},{transform:'translateY(30px)'}],{duration:2000,fill:'both'});
+  const shift = document.getElementById('shift');
+  (function loop(){ const t = performance.now()/1000; shift.style.background = 'linear-gradient(90deg, hsl(' + (t*120) + ',80%,55%), #fff, hsl(' + (t*120+180) + ',80%,55%))'; requestAnimationFrame(loop); })();
+</script>
+</body></html>

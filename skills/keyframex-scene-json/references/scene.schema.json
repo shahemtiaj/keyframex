@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://keyframex.local/schema/scene-1.json",
+  "title": "KeyframeX scene (keyframex.scene v1)",
+  "description": "One After Effects composition described as JSON. Layers are listed top to bottom. Times are seconds, positions are comp pixels, colours are [r,g,b] in 0-1, opacity and scale are percent. Written by the KeyframeX engine, and writable by hand or by an AI.",
+  "type": "object",
+  "required": ["format", "version", "comp", "layers"],
+  "properties": {
+    "format": { "const": "keyframex.scene" },
+    "version": { "const": 1 },
+    "generator": { "type": "string" },
+    "comp": {
+      "type": "object",
+      "required": ["name", "width", "height", "fps", "duration"],
+      "properties": {
+        "name": { "type": "string" },
+        "width": { "type": "number", "minimum": 4, "maximum": 30000 },
+        "height": { "type": "number", "minimum": 4, "maximum": 30000 },
+        "fps": { "type": "number", "minimum": 1, "maximum": 999 },
+        "duration": { "type": "number", "exclusiveMinimum": 0 },
+        "bgColor": { "$ref": "#/definitions/rgb" }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": { "enum": ["image", "video", "audio", "sequence"] },
+          "path": { "type": "string", "description": "Absolute file path" },
+          "rel": { "type": "string", "description": "Path relative to the scene file (preferred when the folder moves)" },
+          "frames": { "type": "integer" },
+          "fps": { "type": "number" },
+          "missing": { "type": "boolean" },
+          "origin": { "type": "string" }
+        }
+      }
+    },
+    "fonts": { "type": "array", "items": { "$ref": "#/definitions/font" } },
+    "layers": { "type": "array", "items": { "$ref": "#/definitions/layer" } },
+    "notes": {
+      "type": "array",
+      "items": { "type": "object", "properties": { "kind": { "type": "string" }, "message": { "type": "string" }, "layers": { "type": "array", "items": { "type": "string" } } } }
+    },
+    "source": { "type": "object" }
+  },
+  "definitions": {
+    "rgb": { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 }, "minItems": 3, "maxItems": 4 },
+    "vec2": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+    "ease": {
+      "type": "array",
+      "description": "One [speed, influence%] pair per After Effects ease dimension (1 for spatial or 1-D properties, one per dimension otherwise).",
+      "items": { "type": "array", "items": [{ "type": "number" }, { "type": "number", "minimum": 0.1, "maximum": 100 }], "minItems": 2, "maxItems": 2 }
+    },
+    "key": {
+      "type": "object",
+      "required": ["t", "v"],
+      "properties": {
+        "t": { "type": "number", "description": "Time in seconds" },
+        "v": { "description": "Value at that time" },
+        "interp": { "enum": ["bezier", "linear", "hold"], "description": "Interpolation leaving this key (default linear)" },
+        "ei": { "$ref": "#/definitions/ease", "description": "Ease into this key" },
+        "eo": { "$ref": "#/definitions/ease", "description": "Ease out of this key" }
+      }
+    },
+    "track": {
+      "description": "A static value { value } or keyframes { keys }.",
+      "oneOf": [
+        { "type": "object", "required": ["value"], "properties": { "value": {} } },
+        { "type": "object", "required": ["keys"], "properties": { "keys": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/key" } }, "spatial": { "type": "boolean" } } }
+      ]
+    },
+    "path": {
+      "type": "object",
+      "description": "After Effects shape path: vertices, in/out tangents relative to each vertex, closed flag.",
+      "required": ["v", "i", "o"],
+      "properties": { "v": { "type": "array", "items": { "$ref": "#/definitions/vec2" } }, "i": { "type": "array", "items": { "$ref": "#/definitions/vec2" } }, "o": { "type": "array", "items": { "$ref": "#/definitions/vec2" } }, "c": { "type": "boolean" } }
+    },
+    "font": {
+      "type": "object",
+      "properties": { "family": { "type": "string" }, "postScriptName": { "type": ["string", "null"] }, "weight": { "type": "number" }, "style": { "enum": ["normal", "italic"] }, "css": { "type": "string" }, "custom": { "type": "boolean" } }
+    },
+    "effect": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["dropShadow", "blur", "gradient", "fill"] },
+        "color": { "$ref": "#/definitions/track" }, "opacity": { "$ref": "#/definitions/track" }, "direction": { "$ref": "#/definitions/track" },
+        "distance": { "$ref": "#/definitions/track" }, "softness": { "$ref": "#/definitions/track" }, "amount": { "$ref": "#/definitions/track" },
+        "kind": { "enum": ["linear", "radial"] }, "start": { "$ref": "#/definitions/vec2" }, "end": { "$ref": "#/definitions/vec2" },
+        "colors": { "type": "array", "items": { "$ref": "#/definitions/rgb" }, "minItems": 2, "maxItems": 2 },
+        "box": { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4, "description": "Box [x,y,w,h] the gradient points are expressed in; mapped onto the layer's bounds" }
+      }
+    },
+    "layer": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "enum": ["shape", "text", "image", "video", "audio", "solid", "null"] },
+        "name": { "type": "string" },
+        "comment": { "type": "string" },
+        "in": { "type": "number" }, "out": { "type": "number" },
+        "startAt": { "type": "number", "description": "Audio: start time in the comp" },
+        "blend": { "type": "string", "description": "After Effects BlendingMode name, e.g. MULTIPLY" },
+        "matte": { "type": "string", "description": "Id of the layer used as alpha track matte" },
+        "matteSource": { "type": "boolean", "description": "This layer is a matte (hidden after build)" },
+        "parent": { "type": "string" },
+        "transform": {
+          "type": "object",
+          "properties": { "anchor": { "$ref": "#/definitions/track" }, "position": { "$ref": "#/definitions/track" }, "scale": { "$ref": "#/definitions/track" }, "rotation": { "$ref": "#/definitions/track" }, "opacity": { "$ref": "#/definitions/track" } }
+        },
+        "shape": {
+          "type": "object",
+          "properties": {
+            "kind": { "enum": ["rect", "ellipse", "path"] },
+            "size": { "$ref": "#/definitions/track" }, "roundness": { "$ref": "#/definitions/track" },
+            "paths": { "$ref": "#/definitions/track", "description": "Value/keys are arrays of path objects" },
+            "fillRule": { "enum": ["nonzero", "evenodd"] }
+          }
+        },
+        "fill": { "type": "object", "properties": { "color": { "$ref": "#/definitions/track" }, "opacity": { "$ref": "#/definitions/track" } } },
+        "stroke": {
+          "type": "object",
+          "properties": {
+            "color": { "$ref": "#/definitions/track" }, "width": { "$ref": "#/definitions/track" }, "opacity": { "$ref": "#/definitions/track" },
+            "cap": { "enum": ["butt", "round", "square"] }, "join": { "enum": ["miter", "round", "bevel"] },
+            "dashes": { "type": "array", "items": { "type": "number" } }, "dashOffset": { "$ref": "#/definitions/track" }
+          }
+        },
+        "trim": { "type": "object", "properties": { "start": { "$ref": "#/definitions/track" }, "end": { "$ref": "#/definitions/track" } } },
+        "text": {
+          "type": "object",
+          "properties": {
+            "font": { "$ref": "#/definitions/font" },
+            "size": { "type": "number" }, "tracking": { "type": "number" }, "leading": { "type": "number" },
+            "justify": { "enum": ["left", "center", "right"] }, "color": { "$ref": "#/definitions/rgb" },
+            "source": { "$ref": "#/definitions/track", "description": "Text; keys are hold keys" },
+            "stroke": { "type": "object", "properties": { "color": { "$ref": "#/definitions/rgb" }, "width": { "type": "number" } } },
+            "noFill": { "type": "boolean" },
+            "counter": { "type": "object", "properties": { "prefix": { "type": "string" }, "suffix": { "type": "string" }, "decimals": { "type": "integer" }, "commas": { "type": "boolean" }, "value": { "$ref": "#/definitions/track" } } }
+          }
+        },
+        "asset": { "type": "string" },
+        "fit": { "enum": ["fill", "cover", "contain", "none"] },
+        "box": { "$ref": "#/definitions/track", "description": "[w,h] of the element box the footage fills" },
+        "cornerRadius": { "type": "number" },
+        "timeRemap": { "$ref": "#/definitions/track" },
+        "muted": { "type": "boolean" },
+        "color": { "$ref": "#/definitions/rgb", "description": "Solid colour" },
+        "effects": { "type": "array", "items": { "$ref": "#/definitions/effect" } }
+      }
+    }
+  }
+}

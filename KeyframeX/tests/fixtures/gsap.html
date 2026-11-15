@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>GSAP Fixture</title>
+<style>
+  body{margin:0;background:#000}
+  .stage{position:relative;width:1080px;height:1080px;background:#f4f1ea;overflow:hidden}
+  .word{position:absolute;left:140px;top:300px;font:800 120px/1 Georgia, serif;color:#111;white-space:nowrap}
+  .word span{display:inline-block}
+  #count{position:absolute;left:140px;top:520px;font:600 90px/1 sans-serif;color:#e4572e}
+  .photo{position:absolute;left:600px;top:620px;width:320px;height:240px;object-fit:cover;border-radius:16px}
+  .clip{position:absolute;left:140px;top:700px;width:360px;height:120px;overflow:hidden;border-radius:12px;background:#222}
+  .clip .bar{position:absolute;left:0;top:40px;width:120px;height:40px;background:#4cc9f0}
+  .blend{position:absolute;left:700px;top:200px;width:200px;height:200px;border-radius:50%;background:#7209b7;mix-blend-mode:multiply;filter:blur(4px)}
+  .wipe{position:absolute;left:600px;top:420px;width:300px;height:120px;background:#06d6a0;clip-path:inset(0 100% 0 0)}
+</style>
+<script src="assets/gsap.min.js"></script>
+</head>
+<body><div class="stage">
+  <div class="word" id="w">Motion</div>
+  <div id="count">0%</div>
+  <img class="photo" src="assets/photo.webp">
+  <div class="clip"><div class="bar"></div></div>
+  <div class="blend"></div>
+  <div class="wipe"></div>
+</div>
+<script>
+  const w=document.getElementById('w'); const txt=w.textContent; w.textContent='';
+  for(const ch of txt){const s=document.createElement('span');s.textContent=ch;w.appendChild(s);}
+  const tl=gsap.timeline();
+  tl.from('#w span',{y:120,opacity:0,stagger:0.08,duration:0.6,ease:'back.out(1.7)'})
+    .to({v:0},{v:87,duration:1.5,ease:'power2.out',onUpdate(){document.getElementById('count').textContent=Math.round(this.targets()[0].v)+'%';}},0.3)
+    .from('.photo',{scale:0.6,rotation:-10,opacity:0,duration:0.8,ease:'power3.out'},0.5)
+    .to('.clip .bar',{x:300,duration:1.2,ease:'none'},0.2)
+    .to('.wipe',{clipPath:'inset(0 0% 0 0)',duration:1,ease:'power2.inOut'},1)
+    .to('.blend',{x:-200,duration:2,ease:'sine.inOut'},0);
+  setTimeout(()=>{document.getElementById('count').style.color='#2b9348';},1800);
+</script></body></html>

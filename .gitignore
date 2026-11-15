@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.log
+# KeyframeX output folders and diagnostics
+*(KeyframeX)/
+KeyframeX/tools/diag-text.txt
+# GSAP is not redistributed here; the GSAP test runs when you add it (see docs/TESTING.md)
+KeyframeX/tests/fixtures/assets/gsap.min.js

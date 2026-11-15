@@ -1,0 +1,28 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Stacking</title>
+<style>
+  body{margin:0}
+  #stage{width:800px;height:600px;position:relative;background:#222;display:flex;align-items:center;justify-content:center}
+  .box{width:300px;height:300px}
+  /* every box covers the point (400,300) */
+  #abs-early{position:absolute;left:250px;top:150px;background:#f00}
+  #flow-late{background:#0f0;margin-left:-100px}          /* in-flow: paints BELOW positioned #abs-early */
+  #neg{position:absolute;left:260px;top:160px;z-index:-1;background:#00f} /* below in-flow */
+  #ctx{position:absolute;left:270px;top:170px;z-index:1;background:#ff0}
+  #ctx .inner{position:absolute;left:0;top:0;z-index:999;width:200px;height:200px;background:#0ff} /* trapped in z:1 */
+  #z2{position:absolute;left:280px;top:180px;z-index:2;background:#f0f}
+  #auto{position:absolute;left:290px;top:190px;background:#fff} /* z auto: no context */
+  #auto .esc{position:absolute;left:0;top:0;z-index:3;width:150px;height:150px;background:#888} /* escapes */
+  #fade{opacity:.9;background:#963;margin-left:-250px}   /* opacity => paints with positioned, in tree order */
+</style></head>
+<body><div id="stage">
+  <div class="box" id="abs-early"></div>
+  <div class="box" id="flow-late"></div>
+  <div class="box" id="neg"></div>
+  <div class="box" id="ctx"><div class="inner"></div></div>
+  <div class="box" id="z2"></div>
+  <div class="box" id="auto"><div class="esc"></div></div>
+  <div class="box" id="fade"></div>
+</div>
+<script>const DURATION = 0.2;</script>
+</body></html>

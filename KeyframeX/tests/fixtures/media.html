@@ -1,0 +1,37 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Media Fixture</title>
+<style>
+  body{margin:0;background:#111}
+  #stage{position:relative;width:1080px;height:1920px;background:#0e1726;overflow:hidden}
+  video{position:absolute;left:60px;top:80px;width:960px;height:540px;object-fit:cover;border-radius:24px}
+  canvas{position:absolute;left:60px;top:700px;width:400px;height:400px}
+  .bg{position:absolute;left:560px;top:700px;width:460px;height:400px;background:url(assets/photo.png) center/cover no-repeat}
+  #users{position:absolute;left:60px;top:1200px;font:700 120px/1 sans-serif;color:#fff}
+  #word{position:absolute;left:60px;top:1400px;font:400 80px/1 serif;color:#ffd166;text-transform:uppercase}
+  #para{position:absolute;left:60px;top:1560px;width:600px;font:500 40px/1.5 sans-serif;color:#9fb3c8;text-align:center}
+</style></head>
+<body><div id="stage">
+  <video src="assets/clip.mp4" muted autoplay></video>
+  <canvas id="cv" width="400" height="400"></canvas>
+  <div class="bg"></div>
+  <div id="users">0</div>
+  <div id="word">alpha</div>
+  <p id="para">Two lines of centred text that wrap inside the box</p>
+  <svg width="1080" height="300" style="position:absolute;left:0;top:1700px" viewBox="0 0 1080 300">
+    <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f72585"/><stop offset="1" stop-color="#4361ee"/></linearGradient></defs>
+    <rect x="60" y="40" width="400" height="80" rx="16" fill="url(#g1)"/>
+    <text x="540" y="100" text-anchor="middle" font-size="48" fill="#fff" font-family="sans-serif">SVG text</text>
+    <g transform="translate(800 150) rotate(20)"><polygon points="0,-60 52,30 -52,30" fill="#4cc9f0"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/></polygon></g>
+  </svg>
+  <audio src="assets/tone.wav" data-start="0.5"></audio>
+</div>
+<script>
+  const DURATION = 2;
+  const ctx = document.getElementById('cv').getContext('2d');
+  function draw(t){ ctx.clearRect(0,0,400,400); ctx.fillStyle='#ef476f'; ctx.beginPath(); ctx.arc(200+120*Math.cos(t*3),200+120*Math.sin(t*3),40,0,7); ctx.fill(); }
+  const start = performance.now();
+  (function loop(){ const t=(performance.now()-start)/1000; draw(t);
+    document.getElementById('users').textContent = Math.round(Math.min(1,t/1.5)*12500).toLocaleString('en-US');
+    requestAnimationFrame(loop); })();
+  setTimeout(()=>{document.getElementById('word').textContent='beta';},1000);
+</script></body></html>

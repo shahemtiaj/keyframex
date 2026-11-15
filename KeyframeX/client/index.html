@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KeyframeX</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 24 24"><path d="M12 1.8 22.2 12 12 22.2 1.8 12z" fill="currentColor"/><path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M19.4 13.5a7.7 7.7 0 0 0 0-3l2-1.5-2-3.4-2.3.9a7.6 7.6 0 0 0-2.6-1.5L14.1 2.5h-4.2l-.4 2.5a7.6 7.6 0 0 0-2.6 1.5l-2.3-.9-2 3.4 2 1.5a7.7 7.7 0 0 0 0 3l-2 1.5 2 3.4 2.3-.9a7.6 7.6 0 0 0 2.6 1.5l.4 2.5h4.2l.4-2.5a7.6 7.6 0 0 0 2.6-1.5l2.3.9 2-3.4z"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M9.5 13l-2 2 2 2 M14.5 13l2 2-2 2"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+</svg>
+
+<div class="wrap">
+  <!-- header -->
+  <header class="top">
+    <div class="brand">
+      <svg class="logo"><use href="#i-logo"/></svg>
+      <b>Keyframe<span>X</span></b>
+      <span class="v" id="ver">1.1</span>
+    </div>
+    <div class="top-acts">
+      <span class="dot" id="hostDot" title="After Effects connection"></span>
+      <button class="icon-btn" id="btnReload" title="Reload the After Effects connection"><svg><use href="#i-refresh"/></svg></button>
+      <button class="icon-btn" id="btnSettings" title="Settings"><svg><use href="#i-gear"/></svg></button>
+    </div>
+  </header>
+
+  <!-- empty: drop zone -->
+  <section class="card" id="emptyCard">
+    <div class="drop" id="drop">
+      <div class="drop-ic"><svg><use href="#i-upload"/></svg></div>
+      <div class="drop-t">Drop your HTML video here</div>
+      <div class="drop-s">or a KeyframeX scene.json, or a folder with one</div>
+      <button class="btn blue" id="btnChoose">Choose file…</button>
+      <div class="drop-tip">Needs Google Chrome or Microsoft Edge on this computer</div>
+    </div>
+    <div class="sec-lab hidden" id="recentLab">Recent</div>
+    <div class="recent" id="recent"></div>
+  </section>
+
+  <!-- converting -->
+  <section class="card hidden" id="convCard">
+    <div class="conv-head">
+      <span class="spin"></span>
+      <div class="grow">
+        <div class="card-t" id="convName">Converting…</div>
+        <div class="sub" id="convStage">Starting the browser</div>
+      </div>
+      <span class="pct" id="convPct">0%</span>
+    </div>
+    <div class="bar"><i id="convBar"></i></div>
+    <div class="steps" id="convSteps"><span data-s="load">Load</span><span data-s="frames">Frames</span><span data-s="fit">Keyframes</span><span data-s="media">Media</span></div>
+    <button class="btn ghost sm cancel" id="btnCancel">Cancel</button>
+  </section>
+
+  <!-- loaded file -->
+  <section class="card hidden" id="fileCard">
+    <div class="file-row">
+      <div class="file-ic"><svg><use href="#i-file"/></svg></div>
+      <div class="grow">
+        <div class="fname" id="fname"></div>
+        <a class="where" id="fwhere" title="Show in Finder / Explorer"><svg><use href="#i-folder"/></svg><span id="fdir"></span></a>
+      </div>
+      <button class="icon-btn" id="btnPreview" title="Open in your browser"><svg><use href="#i-ext"/></svg></button>
+      <button class="icon-btn" id="btnClose" title="Close this file"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="sLayers">–</b>Layers</div>
+      <div class="stat"><b id="sKeys">–</b>Keyframes</div>
+      <div class="stat"><b id="sDur">–</b>Length</div>
+      <div class="stat"><b id="sSize">–</b>Size</div>
+    </div>
+    <div class="src-row" id="srcRow"><span id="srcText"></span> <a id="lenEdit">Change length</a></div>
+    <div class="len-box hidden" id="lenBox">
+      <input id="relen" type="number" min="0.1" step="0.1" placeholder="sec">
+      <span class="sub">seconds</span>
+      <button class="btn sm blue" id="relenGo">Convert again</button>
+    </div>
+    <div class="row-line" id="fontsRow">
+      <span class="ic">Aa</span>
+      <div class="grow" id="fontsText"></div>
+    </div>
+    <div class="row-line hidden" id="notesRow">
+      <span class="ic warn">!</span>
+      <div class="grow">
+        <a id="notesToggle"></a>
+        <div class="notes hidden" id="notesList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- online media -->
+  <section class="card hidden" id="mediaCard">
+    <div class="card-head">
+      <div><div class="card-t">Online media</div><div class="sub" id="mediaSub"></div></div>
+      <span class="pill" id="mediaPill"></span>
+    </div>
+    <div class="mlist" id="mediaList"></div>
+    <div class="btn-row">
+      <button class="btn sm" id="btnRelink">Relink in AE</button>
+      <button class="btn sm" id="btnMediaFolder">Open folder</button>
+    </div>
+  </section>
+
+  <!-- build settings -->
+  <section class="card hidden" id="setCard">
+    <div class="set-row">
+      <div class="set-lab">Build into <small id="hintTarget"></small></div>
+      <div class="seg" id="optTarget">
+        <button data-v="new">New comps</button>
+        <button data-v="active">Active comp</button>
+      </div>
+    </div>
+    <div class="set-row">
+      <div class="set-lab">Keyframes <small id="hintQuality"></small></div>
+      <div class="seg" id="optQuality">
+        <button data-v="light">Light</button>
+        <button data-v="balanced">Balanced</button>
+        <button data-v="exact">Exact</button>
+      </div>
+    </div>
+    <div class="reconv hidden" id="reconv">Keyframes were converted as <b id="reconvWas"></b> — <a id="reconvGo">Convert again</a> to apply.</div>
+    <label class="check"><input type="checkbox" id="optFonts"> Install the web fonts this page uses</label>
+  </section>
+
+  <div class="build-box hidden" id="buildBox">
+    <button class="primary" id="btnBuild"><svg><use href="#i-play"/></svg><span>Build in After Effects</span></button>
+  </div>
+  <div class="result hidden" id="result"></div>
+
+  <!-- log -->
+  <section class="log-card">
+    <div class="log-head"><span class="sec-lab">Activity</span><button class="ghost sm" id="btnClearLog">Clear</button></div>
+    <div class="log" id="log"></div>
+  </section>
+</div>
+
+<!-- settings -->
+<div class="scrim hidden" id="settings">
+  <div class="sheet" role="dialog" aria-label="Settings">
+    <div class="card-head"><div class="card-t">Settings</div><button class="icon-btn" id="btnSettingsClose"><svg><use href="#i-x"/></svg></button></div>
+    <div class="sec-lab">Browser</div>
+    <div class="sub" id="setBrowserFound"></div>
+    <div class="inline"><input id="setBrowser" placeholder="Auto-detect (Chrome, Edge, Brave, Chromium)"><button class="btn sm" id="btnSetBrowser">Choose…</button></div>
+    <div class="sec-lab">Frame rate</div>
+    <select id="setFps"><option value="0">From the page (default 30)</option><option>24</option><option>25</option><option>30</option><option>50</option><option>60</option></select>
+    <div class="sec-lab">Data folder</div>
+    <a class="sub" id="setDataDir"></a>
+    <div class="btn-row end">
+      <button class="btn" id="btnSettingsCancel">Cancel</button>
+      <button class="btn blue" id="btnSettingsSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="js/cep.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/panel.js"></script>
+</body>
+</html>

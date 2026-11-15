@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Remote debugging for development builds: open http://localhost:8098 (panel) in Chrome. -->
+<ExtensionList>
+  <Extension Id="com.keyframex.panel">
+    <HostList><Host Name="AEFT" Port="8098"/></HostList>
+  </Extension>
+</ExtensionList>

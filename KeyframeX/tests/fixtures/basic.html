@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Basic Fixture</title>
+<style>
+  html,body{margin:0;background:#0b0f1a;}
+  #stage{position:relative;width:1280px;height:720px;overflow:hidden;background:#101828;}
+  .card{position:absolute;left:100px;top:120px;width:300px;height:180px;border-radius:24px;background:#2f5bff;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:slide 2s ease-in-out forwards;}
+  @keyframes slide{from{transform:translateX(0) rotate(0deg);opacity:0}to{transform:translateX(500px) rotate(15deg);opacity:1}}
+  h1{position:absolute;left:100px;top:420px;margin:0;font:700 64px/1.1 sans-serif;color:#fff;letter-spacing:2px;}
+  .pill{position:absolute;right:80px;top:80px;width:120px;height:40px;border:3px solid #ffcc00;border-radius:20px;}
+  .grad{position:absolute;left:900px;top:450px;width:200px;height:120px;background:linear-gradient(90deg,#ff0066,#00ccff);}
+</style></head>
+<body><div id="stage">
+  <div class="card"></div>
+  <h1 id="title">Hello KeyframeX</h1>
+  <div class="pill"></div>
+  <div class="grad"></div>
+  <svg width="1280" height="720" viewBox="0 0 1280 720" style="position:absolute;left:0;top:0">
+    <path id="line" d="M100 650 C 400 550, 800 750, 1180 650" stroke="#00ffaa" stroke-width="6" fill="none" stroke-dasharray="1200" stroke-dashoffset="1200">
+    </path>
+    <circle id="dot" cx="640" cy="360" r="30" fill="#ff4466"/>
+  </svg>
+</div>
+<script>
+  const DURATION = 3;
+  document.getElementById('title').animate([{transform:'scale(0.5)',opacity:0},{transform:'scale(1)',opacity:1}],{duration:1000,delay:500,fill:'both',easing:'cubic-bezier(.2,.8,.2,1)'});
+  let start=null;
+  function tick(ts){ if(start===null) start=ts; const t=(ts-start)/1000;
+    document.getElementById('line').style.strokeDashoffset = Math.max(0,1200*(1-t/2.5));
+    document.getElementById('dot').setAttribute('cy', 360 + Math.sin(t*3)*80);
+    requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+</script></body></html>

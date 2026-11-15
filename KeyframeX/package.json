@@ -1,0 +1,14 @@
+{
+  "name": "keyframex",
+  "version": "1.2.3",
+  "description": "KeyframeX — turn HTML motion pages into native, editable After Effects layers and keyframes.",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "engine/index.js",
+  "bin": { "keyframex": "cli/keyframex.js" },
+  "engines": { "node": ">=15" },
+  "scripts": {
+    "test": "node tests/run.js",
+    "convert": "node cli/keyframex.js convert"
+  }
+}

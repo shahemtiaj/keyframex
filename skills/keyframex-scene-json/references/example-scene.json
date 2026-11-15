@@ -1,0 +1,63 @@
+{
+  "format": "keyframex.scene",
+  "version": 1,
+  "generator": "hand-written example",
+  "comp": { "name": "Hand-written scene", "width": 1920, "height": 1080, "fps": 30, "duration": 4, "bgColor": [0.05, 0.06, 0.1] },
+  "assets": [],
+  "fonts": [{ "family": "Arial", "postScriptName": "Arial-BoldMT", "weight": 700, "style": "normal" }],
+  "layers": [
+    {
+      "id": "title", "type": "text", "name": "Title",
+      "transform": {
+        "anchor": { "value": [0, 0] },
+        "position": { "keys": [
+          { "t": 0.3, "v": [960, 620], "interp": "bezier", "eo": [[0, 33]] },
+          { "t": 1.1, "v": [960, 560], "interp": "bezier", "ei": [[0, 80]] }
+        ], "spatial": true },
+        "opacity": { "keys": [{ "t": 0.3, "v": 0 }, { "t": 0.8, "v": 100 }] }
+      },
+      "text": {
+        "font": { "family": "Arial", "postScriptName": "Arial-BoldMT", "weight": 700, "style": "normal" },
+        "size": 120, "tracking": -10, "leading": 130, "justify": "center", "color": [1, 1, 1],
+        "source": { "keys": [{ "t": 0, "v": "Hello", "interp": "hold" }, { "t": 2, "v": "KeyframeX", "interp": "hold" }] }
+      }
+    },
+    {
+      "id": "count", "type": "text", "name": "Counter",
+      "transform": { "position": { "value": [960, 820] } },
+      "text": {
+        "font": { "family": "Arial", "postScriptName": "ArialMT", "weight": 400, "style": "normal" },
+        "size": 64, "justify": "center", "color": [0.48, 0.36, 1],
+        "source": { "value": "0 users" },
+        "counter": { "prefix": "", "suffix": " users", "decimals": 0, "commas": true,
+          "value": { "keys": [{ "t": 0.5, "v": 0, "interp": "bezier", "eo": [[0, 40]] }, { "t": 3, "v": 25000, "interp": "bezier", "ei": [[0, 70]] }] } }
+      }
+    },
+    {
+      "id": "line", "type": "shape", "name": "Underline",
+      "transform": { "position": { "value": [0, 0] } },
+      "shape": { "kind": "path", "paths": { "value": [{ "v": [[660, 640], [1260, 640]], "i": [[0, 0], [0, 0]], "o": [[0, 0], [0, 0]], "c": false }] } },
+      "stroke": { "color": { "value": [0.48, 0.36, 1] }, "width": { "value": 8 }, "cap": "round" },
+      "trim": { "start": { "value": 0 }, "end": { "keys": [{ "t": 1, "v": 0, "interp": "bezier", "eo": [[0, 60]] }, { "t": 1.8, "v": 100, "interp": "bezier", "ei": [[0, 60]] }] } }
+    },
+    {
+      "id": "dot", "type": "shape", "name": "Dot",
+      "transform": {
+        "position": { "keys": [{ "t": 0, "v": [300, 540] }, { "t": 4, "v": [1620, 540] }], "spatial": true },
+        "scale": { "keys": [{ "t": 0, "v": [100, 100], "interp": "bezier", "eo": [[0, 50], [0, 50]] }, { "t": 2, "v": [160, 160], "interp": "bezier", "ei": [[0, 50], [0, 50]] }] }
+      },
+      "shape": { "kind": "ellipse", "size": { "value": [60, 60] } },
+      "fill": { "color": { "value": [1, 0.42, 0.42] }, "opacity": { "value": 90 } },
+      "effects": [{ "type": "blur", "amount": { "value": 6 } }]
+    },
+    {
+      "id": "card", "type": "shape", "name": "Card",
+      "transform": { "position": { "value": [960, 540] }, "rotation": { "keys": [{ "t": 0, "v": -4 }, { "t": 4, "v": 4 }] } },
+      "shape": { "kind": "rect", "size": { "value": [900, 520] }, "roundness": { "value": 40 } },
+      "fill": { "color": { "value": [0.12, 0.13, 0.2] } },
+      "stroke": { "color": { "value": [0.3, 0.3, 0.45] }, "width": { "value": 2 } },
+      "effects": [{ "type": "dropShadow", "color": { "value": [0, 0, 0] }, "opacity": { "value": 50 }, "direction": { "value": 180 }, "distance": { "value": 20 }, "softness": { "value": 60 } }]
+    },
+    { "id": "bg", "type": "solid", "name": "Background", "color": [0.05, 0.06, 0.1] }
+  ]
+}
